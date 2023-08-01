@@ -56,7 +56,7 @@ async def send_admin_group(*args: Any, **kwargs: Any) -> types.Message:
 @cached(ttl=15)
 async def amt_donated(user_id: int) -> int:
     async with pool.acquire() as conn:
-        amt = await conn.fetchval("SELECT SUM(amount) FROM donation WHERE user_id = $1;", user_id)
+        amt = await conn.fetchval("LỰA CHỌN SUM(amount) TỪ quyên góp Ở ĐÂY user_id = $1;", user_id)
         return amt or 0
 
 
@@ -70,10 +70,10 @@ def inline_keyboard_from_button(button: types.InlineKeyboardButton) -> types.Inl
 
 
 ADD_TO_GROUP_KEYBOARD = inline_keyboard_from_button(
-    types.InlineKeyboardButton("Add to group", url="https://t.me/on9wordchainbot?startgroup=_")
+    types.InlineKeyboardButton("Thêm vào nhóm", url="https://t.me/on9wordchainbot?startgroup=_")
 )
 ADD_ON9BOT_TO_GROUP_KEYBOARD = inline_keyboard_from_button(
-    types.InlineKeyboardButton("Add On9Bot to group", url="https://t.me/On9Bot?startgroup=_")
+    types.InlineKeyboardButton("Thêm On9Bot vào nhóm", url="https://t.me/On9Bot?startgroup=_")
 )
 
 
@@ -81,7 +81,7 @@ def send_private_only_message(f: Callable[..., Any]) -> Callable[..., Any]:
     @wraps(f)
     async def inner(message: types.Message, *args: Any, **kwargs: Any) -> None:
         if message.chat.id < 0:
-            await message.reply("Please use this command in private.", allow_sending_without_reply=True)
+            await message.reply("Vui lòng sử dụng lệnh này ở chế độ riêng tư.", allow_sending_without_reply=True)
             return
         await f(message, *args, **kwargs)
 
@@ -93,7 +93,7 @@ def send_groups_only_message(f: Callable[..., Any]) -> Callable[..., Any]:
     async def inner(message: types.Message, *args: Any, **kwargs: Any) -> None:
         if message.chat.id > 0:
             await message.reply(
-                "This command can only be used in groups.",
+                "Lệnh này chỉ có thể được sử dụng trong các nhóm.",
                 allow_sending_without_reply=True, reply_markup=ADD_TO_GROUP_KEYBOARD
             )
             return
