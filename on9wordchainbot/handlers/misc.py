@@ -19,8 +19,8 @@ from ..words import Words
 async def cmd_start(message: types.Message) -> None:
     await message.reply(
         (
-            "Hi! I host games of word chain in Telegram groups.\n"
-            "Add me to a group to start playing games!"
+            "CHÀO! Tôi tổ chức các trò chơi chuỗi từ trong các nhóm Telegram.\n"
+            "Thêm tôi vào một nhóm để bắt đầu chơi trò chơi!"
         ),
         disable_web_page_preview=True, allow_sending_without_reply=True,
         reply_markup=ADD_TO_GROUP_KEYBOARD
@@ -42,22 +42,22 @@ async def cmd_feedback(message: types.Message) -> None:
     if not arg:
         await message.reply(
             (
-                "Function: Send feedback to my owner.\n"
-                f"Usage: `/feedback@{(await bot.me).username} feedback`"
+                "Chức năng: Gửi phản hồi cho chủ sở hữu của tôi.\n"
+                f"Cách sử dụng: `/feedback@{(await bot.me).username} nhận xét`"
             ),
             allow_sending_without_reply=True
         )
         return
 
     asyncio.create_task(message.forward(ADMIN_GROUP_ID))
-    asyncio.create_task(message.reply("Feedback sent successfully.", allow_sending_without_reply=True))
+    asyncio.create_task(message.reply("Đã gửi phản hồi thành công.", allow_sending_without_reply=True))
 
 
 @dp.message_handler(is_owner=True, commands="maintmode")
 async def cmd_maintmode(message: types.Message) -> None:
     GlobalState.maint_mode = not GlobalState.maint_mode
     await message.reply(
-        f"Maintenance mode has been switched {'on' if GlobalState.maint_mode else 'off'}.",
+        f"Chế độ bảo trì đã được chuyển đổi {'on' if GlobalState.maint_mode else 'off'}.",
         allow_sending_without_reply=True
     )
 
@@ -79,7 +79,7 @@ async def cmd_sql(message: types.Message) -> None:
         return
 
     if not res:
-        await message.reply("No results returned.", allow_sending_without_reply=True)
+        await message.reply("Không có kết quả trả về.", allow_sending_without_reply=True)
         return
 
     text = ["*" + " - ".join(res[0].keys()) + "*"]
@@ -92,14 +92,14 @@ async def cmd_sql(message: types.Message) -> None:
 async def new_member(message: types.Message) -> None:
     if any(user.id == bot.id for user in message.new_chat_members):  # self added to group
         await message.reply(
-            "Thanks for adding me. Start a classic game with /startclassic!",
+            "Cảm ơn vì đã thêm tôi. Bắt đầu một trò chơi cổ điển với /startclassic!",
             reply=False
         )
     elif message.chat.id == OFFICIAL_GROUP_ID:
         await message.reply(
             (
-                "Welcome to the official On9 Word Chain group!\n"
-                "Start a classic game with /startclassic!"
+                "Chào mừng bạn đến với nhóm On9 Word Chain chính thức!\n"
+                "Bắt đầu một trò chơi cổ điển với /startclassic!"
             ),
             allow_sending_without_reply=True
         )
@@ -128,8 +128,8 @@ async def inline_handler(inline_query: types.InlineQuery):
             [
                 types.InlineQueryResultArticle(
                     id=str(uuid4()),
-                    title="A query can only consist of alphabets",
-                    description="Try a different query",
+                    title="Một truy vấn chỉ có thể bao gồm các bảng chữ cái",
+                    description="Hãy thử một truy vấn khác",
                     input_message_content=types.InputTextMessageContent(r"¯\\_(ツ)\_/¯")
                 )
             ],
@@ -154,8 +154,8 @@ async def inline_handler(inline_query: types.InlineQuery):
         res.append(
             types.InlineQueryResultArticle(
                 id=str(uuid4()),
-                title="No results found",
-                description="Try a different query",
+                title="không có kết quả nào được tìm thấy",
+                description="Hãy thử một truy vấn khác",
                 input_message_content=types.InputTextMessageContent(r"¯\\_(ツ)\_/¯")
             )
         )
@@ -182,19 +182,19 @@ async def error_handler(update: types.Update, error: TelegramAPIError) -> None:
     if isinstance(error, (BotKicked, BotBlocked, CantInitiateConversation, InvalidQueryID)):
         return
     if isinstance(error, BadRequest) and str(error) in (
-        "Have no rights to send a message",
-        "Not enough rights to send text messages to the chat",
-        "Group chat was deactivated",
+        "Không có quyền gửi tin nhắn",
+        "Không đủ quyền để gửi tin nhắn văn bản đến cuộc trò chuyện",
+        "Trò chuyện nhóm đã bị vô hiệu hóa",
         "Chat_write_forbidden",
         "Channel_private"
     ):
         return
     if isinstance(error, Unauthorized):
-        if str(error).startswith("Forbidden: bot is not a member"):
+        if str(error).startswith("Bị cấm: bot không phải là thành viên"):
             return
-        if str(error).startswith("Forbidden: bot was kicked"):
+        if str(error).startswith("Bị cấm: bot đã bị kick"):
             return
-    if str(error).startswith("Internal Server Error: sent message was immediately deleted"):
+    if str(error).startswith("Lỗi máy chủ nội bộ: tin nhắn đã gửi bị xóa ngay lập tức"):
         return
 
     if isinstance(error, MigrateToChat):  # TODO: Test
@@ -203,20 +203,20 @@ async def error_handler(update: types.Update, error: TelegramAPIError) -> None:
             GlobalState.games[error.migrate_to_chat_id] = GlobalState.games.pop(group_id)
             GlobalState.games[error.migrate_to_chat_id].group_id = error.migrate_to_chat_id
             asyncio.create_task(
-                send_admin_group(f"Game moved from {group_id} to {error.migrate_to_chat_id}.")
+                send_admin_group(f"Trò chơi chuyển từ {group_id} to {error.migrate_to_chat_id}.")
             )
         async with pool.acquire() as conn:
             await conn.execute(
-                "UPDATE game SET group_id = $1 WHERE group_id = $2;",
+                "CẬP NHẬT BỘ game group_id = $1 Tại group_id = $2;",
                 error.migrate_to_chat_id, group_id
             )
             await conn.execute(
-                "UPDATE gameplayer SET group_id = $1 WHERE group_id = $2;",
+                "CẬP NHẬT bộ người chơi group_id = $1 Tại group_id = $2;",
                 error.migrate_to_chat_id, group_id
             )
-            await conn.execute("DELETE FROM game WHERE group_id = $1;", group_id)
-            await conn.execute("DELETE FROM gameplayer WHERE group_id = $1;", group_id)
-        await send_admin_group(f"Group statistics migrated from {group_id} to {error.migrate_to_chat_id}.")
+            await conn.execute("XÓA TỪ trò chơi Ở Tại group_id = $1;", group_id)
+            await conn.execute("XÓA TỪ người chơi ở Tại group_id = $1;", group_id)
+        await send_admin_group(f"Thống kê nhóm đã di chuyển từ {group_id} to {error.migrate_to_chat_id}.")
         return
 
     send_admin_msg = await send_admin_group(
@@ -236,7 +236,7 @@ async def error_handler(update: types.Update, error: TelegramAPIError) -> None:
 
     asyncio.create_task(
         update.message.reply(
-            f"Error occurred (`{error.__class__.__name__}`). My owner has been notified.",
+            f"Xảy ra lỗi (`{error.__class__.__name__}`). Chủ sở hữu của tôi đã được thông báo.",
             allow_sending_without_reply=True
         )
     )
@@ -244,7 +244,7 @@ async def error_handler(update: types.Update, error: TelegramAPIError) -> None:
     if group_id in GlobalState.games:
         asyncio.create_task(
             send_admin_msg.reply(
-                f"Killing game in {group_id} consequently.",
+                f"Do đó, trò chơi loại người trong {group_id}.",
                 allow_sending_without_reply=True
             )
         )
@@ -254,4 +254,4 @@ async def error_handler(update: types.Update, error: TelegramAPIError) -> None:
         # If game is still not terminated
         if group_id in GlobalState.games:
             del GlobalState.games[group_id]
-            await update.message.reply("Game ended forcibly.", allow_sending_without_reply=True)
+            await update.message.reply("Trò chơi kết thúc bất ngờ.", allow_sending_without_reply=True)
