@@ -10,7 +10,7 @@ from ...utils import get_random_word
 
 
 class EliminationGame(ClassicGame):
-    name = "elimination game"
+    name = "trò chơi loại bỏ"
     command = "startelim"
 
     __slots__ = ("round", "turns_until_elimination", "exceeded_score_limit")
@@ -92,13 +92,13 @@ class EliminationGame(ClassicGame):
     async def send_turn_message(self) -> None:
         await self.send_message(
             (
-                f"Turn: {self.players_in_game[0].mention}"
+                f"Lượt: {self.players_in_game[0].mention}"
                 # Do not show next player on queue if this is last turn of the round
                 # Since they could be eliminated
-                + (f" (Next: {self.players_in_game[1].name})\n" if self.turns_until_elimination > 1 else "\n")
-                + f"Your word must start with <i>{self.current_word[-1].upper()}</i>.\n"
-                  f"You have <b>{self.time_limit}s</b> to answer.\n\n"
-                  "Leaderboard:\n" + self.get_leaderboard(show_player=self.players_in_game[0])
+                + (f" (Tiếp theo: {self.players_in_game[1].name})\n" if self.turns_until_elimination > 1 else "\n")
+                + f"Từ của bạn phải bắt đầu bằng <i>{self.current_word[-1].upper()}</i>.\n"
+                  f"Bạn có <b>{self.time_limit}s</b> to answer.\n\n"
+                  "Bảng xếp hạng:\n" + self.get_leaderboard(show_player=self.players_in_game[0])
             ),
             parse_mode=types.ParseMode.HTML
         )
@@ -115,9 +115,9 @@ class EliminationGame(ClassicGame):
             self.exceeded_score_limit = True
 
     async def send_post_turn_message(self, word: str) -> None:
-        text = f"_{word.capitalize()}_ is accepted."
+        text = f"_{word.capitalize()}_ được chấp nhận."
         if self.exceeded_score_limit:
-            text += f"\nThat is a long word! It will only count for {GameSettings.ELIM_MAX_TURN_SCORE} points."
+            text += f"\nĐó là một từ dài! Nó sẽ chỉ tính cho {GameSettings.ELIM_MAX_TURN_SCORE} điểm."
             self.exceeded_score_limit = False
         await self.send_message(text)
         # No limit reduction
@@ -130,8 +130,8 @@ class EliminationGame(ClassicGame):
 
         await self.send_message(
             (
-                f"The first word is <i>{self.current_word.capitalize()}</i>.\n\n"
-                "Turn order:\n"
+                f"Từ đầu tiên là <i>{self.current_word.capitalize()}</i>.\n\n"
+                "Lượt khác:\n"
                 + "\n".join(p.mention for p in self.players_in_game)
             ),
             parse_mode=types.ParseMode.HTML
@@ -146,7 +146,7 @@ class EliminationGame(ClassicGame):
                 return False
             self.accepting_answers = False
             await self.send_message(
-                f"{self.players_in_game[0].mention} ran out of time!",
+                f"{self.players_in_game[0].mention} hết thời gian!",
                 parse_mode=types.ParseMode.HTML
             )
 
@@ -173,7 +173,7 @@ class EliminationGame(ClassicGame):
         self.turns_until_elimination = len(self.players_in_game)
 
         await self.send_message(
-            f"Round {self.round} is starting...\n\nLeaderboard:\n" + self.get_leaderboard(),
+            f"Vòng {self.round} đang bắt đầu...\n\nBảng xếp hạng:\n" + self.get_leaderboard(),
             parse_mode=types.ParseMode.HTML
         )
 
@@ -185,13 +185,13 @@ class EliminationGame(ClassicGame):
 
         await self.send_message(
             (
-                f"Round {self.round} completed.\n\nLeaderboard:\n"
+                f"Vòng {self.round} đã hoàn thành.\n\nBảng xếp hạng:\n"
                 + self.get_leaderboard()
                 + "\n\n"
                 + ", ".join(p.mention for p in eliminated)
                 + " "
                 + ("is" if len(eliminated) == 1 else "are")
-                + f" eliminated for having the lowest score of {min_score}."
+                + f" bị loại vì có số điểm thấp nhất {min_score}."
             ),
             parse_mode=types.ParseMode.HTML
         )
