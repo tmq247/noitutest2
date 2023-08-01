@@ -23,11 +23,11 @@ async def cmd_stats(message: types.Message) -> None:
     rmsg = message.reply_to_message
     user = (rmsg.forward_from or rmsg.from_user) if rmsg else message.from_user
     async with pool.acquire() as conn:
-        res = await conn.fetchrow("SELECT * FROM player WHERE user_id = $1;", user.id)
+        res = await conn.fetchrow("CHỌN * TỪ người chơi Ở TẠI user_id = $1;", user.id)
 
     if not res:
         await message.reply(
-            f"No statistics for {user.get_mention(as_html=True)}!",
+            f"Không có số liệu thống kê cho {user.get_mention(as_html=True)}!",
             parse_mode=types.ParseMode.HTML, allow_sending_without_reply=True
         )
         return
@@ -37,13 +37,13 @@ async def cmd_stats(message: types.Message) -> None:
     )
     text = (
         f"\U0001f4ca Statistics for {mention}:\n"
-        f"<b>{res['game_count']}</b> games played\n"
-        f"<b>{res['win_count']} ({res['win_count'] / res['game_count']:.0%})</b> games won\n"
-        f"<b>{res['word_count']}</b> total words played\n"
-        f"<b>{res['letter_count']}</b> total letters played"
+        f"<b>{res['game_count']}</b> trò chơi đã chơi\n"
+        f"<b>{res['win_count']} ({res['win_count'] / res['game_count']:.0%})</b> chiến thắng trò chơi\n"
+        f"<b>{res['word_count']}</b> tổng số từ chơi\n"
+        f"<b>{res['letter_count']}</b> tổng số chữ cái đã chơi"
     )
     if res["longest_word"]:
-        text += f"\nLongest word: <b>{res['longest_word'].capitalize()}</b>"
+        text += f"\nTừ dài nhất: <b>{res['longest_word'].capitalize()}</b>"
     await message.reply(text, parse_mode=types.ParseMode.HTML, allow_sending_without_reply=True)
 
 
@@ -54,18 +54,18 @@ async def cmd_groupstats(message: types.Message) -> None:
     async with pool.acquire() as conn:
         player_cnt, game_cnt, word_cnt, letter_cnt = await conn.fetchrow(
             """\
-            SELECT COUNT(DISTINCT user_id), COUNT(DISTINCT game_id), SUM(word_count), SUM(letter_count)
-                FROM gameplayer
-                WHERE group_id = $1;""",
+            LỰA CHỌN COUNT(DISTINCT user_id), COUNT(DISTINCT game_id), SUM(word_count), SUM(letter_count)
+                TỪ game thủ
+                TẠI group_id = $1;""",
             message.chat.id
         )
     await message.reply(
         (
-            f"\U0001f4ca Statistics for <b>{quote_html(message.chat.title)}</b>\n"
-            f"<b>{player_cnt}</b> players\n"
-            f"<b>{game_cnt}</b> games played\n"
-            f"<b>{word_cnt}</b> total words played\n"
-            f"<b>{letter_cnt}</b> total letters played"
+            f"\U0001f4ca Thống kê cho <b>{quote_html(message.chat.title)}</b>\n"
+            f"<b>{player_cnt}</b> gười chơi\n"
+            f"<b>{game_cnt}</b> trò chơi đã chơi\n"
+            f"<b>{word_cnt}</b> tổng số từ chơi\n"
+            f"<b>{letter_cnt}</b> tổng số chữ cái đã chơi"
         ),
         parse_mode=types.ParseMode.HTML,
         allow_sending_without_reply=True
@@ -77,14 +77,14 @@ async def get_global_stats() -> str:
     async def get_cnt_1() -> Tuple[int, int]:
         async with pool.acquire() as conn:
             group_cnt, game_cnt = await conn.fetchrow(
-                "SELECT COUNT(DISTINCT group_id), COUNT(*) FROM game;"
+                "LỰA CHỌN COUNT(DISTINCT group_id), COUNT(*) TỪ trò chơi;"
             )
         return group_cnt, game_cnt
 
     async def get_cnt_2() -> Tuple[int, int, int]:
         async with pool.acquire() as conn:
             player_cnt, word_cnt, letter_cnt = await conn.fetchrow(
-                "SELECT COUNT(*), SUM(word_count), SUM(letter_count) FROM player;"
+                "LỰA CHỌN COUNT(*), SUM(word_count), SUM(letter_count) TỪ người chơi;"
             )
             return player_cnt, word_cnt, letter_cnt
 
@@ -94,12 +94,12 @@ async def get_global_stats() -> str:
     player_cnt, word_cnt, letter_cnt = await get_cnt_2_task
 
     return (
-        "\U0001f4ca Global statistics\n"
-        f"*{group_cnt}* groups\n"
-        f"*{player_cnt}* players\n"
-        f"*{game_cnt}* games played\n"
-        f"*{word_cnt}* total words played\n"
-        f"*{letter_cnt}* total letters played"
+        "\U0001f4ca thống kê toàn cầu\n"
+        f"*{group_cnt}* các nhóm\n"
+        f"*{player_cnt}* người chơi\n"
+        f"*{game_cnt}* trò chơi đã chơi\n"
+        f"*{word_cnt}* tổng số từ chơi\n"
+        f"*{letter_cnt}* tổng số chữ cái đã chơi"
     )
 
 
@@ -125,9 +125,9 @@ async def cmd_trends(message: types.Message) -> None:
             return dict(
                 await conn.fetch(
                     """\
-                    SELECT start_time::DATE d, COUNT(start_time::DATE)
-                        FROM game
-                        WHERE start_time::DATE >= $1
+                    LỰA CHỌN start_time::DATE d, COUNT(start_time::DATE)
+                        TỪ trò chơi
+                        TẠI start_time::DATE >= $1
                         GROUP BY d
                         ORDER BY d;""",
                     today - timedelta(days=days - 1)
@@ -139,10 +139,10 @@ async def cmd_trends(message: types.Message) -> None:
             return dict(
                 await conn.fetch(
                     """\
-                    SELECT game.start_time::DATE d, COUNT(DISTINCT gameplayer.user_id)
-                        FROM gameplayer
-                        INNER JOIN game ON gameplayer.game_id = game.id
-                        WHERE game.start_time::DATE >= $1
+                    LỰA CHỌN game.start_time::DATE d, COUNT(DISTINCT gameplayer.user_id)
+                        TỪ game thủ
+                        INNER THAM GIA trò chơi BẬT gameplayer.game_id = game.id
+                        TẠI game.start_time::DATE >= $1
                         GROUP BY d
                         ORDER BY d;""",
                     today - timedelta(days=days - 1)
@@ -154,9 +154,9 @@ async def cmd_trends(message: types.Message) -> None:
             return dict(
                 await conn.fetch(
                     """\
-                    SELECT start_time::DATE d, COUNT(DISTINCT group_id)
-                        FROM game
-                        WHERE game.start_time::DATE >= $1
+                    LỰA CHỌN start_time::DATE d, COUNT(DISTINCT group_id)
+                        TỪ trò chơi
+                        TẠI game.start_time::DATE >= $1
                         GROUP BY d
                         ORDER BY d;""",
                     today - timedelta(days=days - 1)
@@ -168,20 +168,20 @@ async def cmd_trends(message: types.Message) -> None:
             return dict(
                 await conn.fetch(
                     """\
-                    SELECT *
-                        FROM (
-                            SELECT d, SUM(count) OVER (ORDER BY d)
-                                FROM (
-                                    SELECT d, COUNT(group_id)
-                                        FROM (
-                                            SELECT DISTINCT group_id, MIN(start_time::DATE) d
-                                                FROM game
+                    LỰA CHỌN *
+                        TỪ (
+                            LỰA CHỌN d, SUM(count) HẾT ( ĐẶT HÀNG THEO d)
+                                TỪ (
+                                    LỰA CHỌN d, COUNT(group_id)
+                                        TỪ (
+                                            LỰA CHỌN DISTINCT group_id, MIN(start_time::DATE) d
+                                                TỪ trò chơi
                                                 GROUP BY group_id
                                         ) gd
                                         GROUP BY d
                                 ) dg
                         ) ds
-                        WHERE d >= $1;""",
+                        TẠI d >= $1;""",
                     today - timedelta(days=days - 1)
                 )
             )
@@ -191,21 +191,21 @@ async def cmd_trends(message: types.Message) -> None:
             return dict(
                 await conn.fetch(
                     """\
-                    SELECT *
-                        FROM (
-                            SELECT d, SUM(count) OVER (ORDER BY d)
-                                FROM (
-                                    SELECT d, COUNT(user_id)
-                                        FROM (
-                                            SELECT DISTINCT user_id, MIN(start_time::DATE) d
-                                                FROM gameplayer
-                                                INNER JOIN game ON game_id = game.id
+                    LỰA CHỌN *
+                        TỪ (
+                            LỰA CHỌN d, SUM(count) HẾT ( ĐẶT HÀNG THEO d)
+                                TỪ (
+                                    LỰA CHỌN d, COUNT(user_id)
+                                        TỪ (
+                                            LỰA CHỌN DISTINCT user_id, MIN(start_time::DATE) d
+                                                TỪ game thủ
+                                                INNER THAM GIA trò chơi BẬT game_id = game.id
                                                 GROUP BY user_id
                                         ) ud
                                         GROUP BY d
                                 ) du
                         ) ds
-                        WHERE d >= $1;""",
+                        TẠI d >= $1;""",
                     today - timedelta(days=days - 1)
                 )
             )
@@ -214,9 +214,9 @@ async def cmd_trends(message: types.Message) -> None:
         async with pool.acquire() as conn:
             return await conn.fetch(
                 """\
-                SELECT COUNT(game_mode), game_mode
-                    FROM game
-                    WHERE start_time::DATE >= $1
+                LỰA CHỌN COUNT(game_mode), game_mode
+                    TỪ trò chơi
+                    TẠI start_time::DATE >= $1
                     GROUP BY game_mode
                     ORDER BY count;""",
                 today - timedelta(days=days - 1)
@@ -250,7 +250,7 @@ async def cmd_trends(message: types.Message) -> None:
             if i == 0:
                 async with pool.acquire() as conn:
                     cumulative_groups[dt] = await conn.fetchval(
-                        "SELECT COUNT(DISTINCT group_id) FROM game WHERE start_time::DATE <= $1;", dt
+                        "LỰA CHỌN COUNT(DISTINCT group_id) TỪ trò chơi Ở TẠI start_time::DATE <= $1;", dt
                     )
             else:
                 cumulative_groups[dt] = cumulative_groups[dt - timedelta(days=1)]
@@ -263,10 +263,10 @@ async def cmd_trends(message: types.Message) -> None:
                 async with pool.acquire() as conn:
                     cumulative_players[dt] = await conn.fetchval(
                         """\
-                        SELECT COUNT(DISTINCT user_id)
-                            FROM gameplayer
-                            INNER JOIN game ON game_id = game.id
-                            WHERE start_time <= $1;""",
+                        LỰA CHỌN COUNT(DISTINCT user_id)
+                            TỪ gameplayer
+                            INNER THAM GIA trò chơi BẬT game_id = game.id
+                            TẠI start_time <= $1;""",
                         dt
                     )
             else:
@@ -279,7 +279,7 @@ async def cmd_trends(message: types.Message) -> None:
 
     plt.figure(figsize=(15, 8))
     plt.subplots_adjust(hspace=0.4)
-    plt.suptitle(f"Trends in the Past {days} Days", size=25)
+    plt.suptitle(f"Xu hướng trong quá khứ {days} Ngày", size=25)
 
     tp = [today - timedelta(days=i) for i in range(days - 1, -1, -1)]
     f = DateFormatter("%b %d" if days < 180 else "%b" if days < 335 else "%b %Y")
@@ -288,7 +288,7 @@ async def cmd_trends(message: types.Message) -> None:
     sp.xaxis.set_major_formatter(f)
     sp.yaxis.set_major_locator(MaxNLocator(integer=True))  # Force y-axis intervals to be integral
     plt.setp(sp.xaxis.get_majorticklabels(), rotation=45, horizontalalignment="right")
-    plt.title("Games Played", size=18)
+    plt.title("Trò chơi đã chơi", size=18)
     plt.plot(tp, [daily_games.get(i, 0) for i in tp])
     plt.ylim(ymin=0)
 
@@ -296,7 +296,7 @@ async def cmd_trends(message: types.Message) -> None:
     sp.xaxis.set_major_formatter(f)
     sp.yaxis.set_major_locator(MaxNLocator(integer=True))
     plt.setp(sp.xaxis.get_majorticklabels(), rotation=45, horizontalalignment="right")
-    plt.title("Active Groups", size=18)
+    plt.title("Nhóm hoạt động", size=18)
     plt.plot(tp, [active_groups.get(i, 0) for i in tp])
     plt.ylim(ymin=0)
 
@@ -304,7 +304,7 @@ async def cmd_trends(message: types.Message) -> None:
     sp.xaxis.set_major_formatter(f)
     sp.yaxis.set_major_locator(MaxNLocator(integer=True))
     plt.setp(sp.xaxis.get_majorticklabels(), rotation=45, horizontalalignment="right")
-    plt.title("Active Players", size=18)
+    plt.title("Người chơi tích cực", size=18)
     plt.plot(tp, [active_players.get(i, 0) for i in tp])
     plt.ylim(ymin=0)
 
@@ -331,26 +331,26 @@ async def cmd_trends(message: types.Message) -> None:
         colors=["xkcd:" + c for c in colors[len(colors) - len(game_mode_play_cnt):]],
         startangle=90
     )
-    plt.legend(slices, labels, title="Game Modes Played", fontsize="x-small", loc="best")
+    plt.legend(slices, labels, title="Chế độ trò chơi đã chơi", fontsize="x-small", loc="best")
     plt.axis("equal")
 
     sp = plt.subplot(235)
     sp.xaxis.set_major_formatter(f)
     sp.yaxis.set_major_locator(MaxNLocator(integer=True))
     plt.setp(sp.xaxis.get_majorticklabels(), rotation=45, horizontalalignment="right")
-    plt.title("Cumulative Groups", size=18)
+    plt.title("Nhóm tích lũy", size=18)
     plt.plot(tp, [cumulative_groups[i] for i in tp])
 
     sp = plt.subplot(236)
     sp.xaxis.set_major_formatter(f)
     sp.yaxis.set_major_locator(MaxNLocator(integer=True))
     plt.setp(sp.xaxis.get_majorticklabels(), rotation=45, horizontalalignment="right")
-    plt.title("Cumulative Players", size=18)
+    plt.title("Người chơi tích lũy", size=18)
     plt.plot(tp, [cumulative_players[i] for i in tp])
 
     # Save the plot as a jpg and send it
     plt.savefig("trends.jpg", bbox_inches="tight")
     plt.close("all")
     async with aiofiles.open("trends.jpg", "rb") as f:
-        await message.reply_photo(f, caption=f"Generation time: `{time.time() - t:.3f}s`")
+        await message.reply_photo(f, caption=f"Thời gian thế hệ: `{time.time() - t:.3f}s`")
     await aiofiles.os.remove("trends.jpg")
