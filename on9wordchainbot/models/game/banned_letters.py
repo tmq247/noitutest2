@@ -27,7 +27,7 @@ class BannedLettersGame(ClassicGame):
                 f"<b>exclude</b> <i>{', '.join(c.upper() for c in self.banned_letters)}</i> và "
                 f"bao gồm <b>at least {self.min_letters_limit} "
                 f"thư{'' if self.min_letters_limit == 1 else 's'}</b>.\n"
-                f"Bạn có <b>{self.time_limit}s</b> to answer.\n"
+                f"Bạn có <b>{self.time_limit}s</b> để trả lời.\n"
                 f"Người chơi còn lại: {len(self.players_in_game)}/{len(self.players)}\n"
                 f"Tổng số từ: {self.turns}"
             ),
