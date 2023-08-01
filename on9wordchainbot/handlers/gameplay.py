@@ -23,8 +23,8 @@ async def start_game(message: types.Message, game_type: Type[ClassicGame]) -> No
         # Only stop people from starting games, not joining
         await message.reply(
             (
-                "Maintenance mode is on. Games are temporarily disabled.\n"
-                "This is likely due to a pending bot update."
+                "Chế độ bảo trì đang bật. Trò chơi tạm thời bị vô hiệu hóa.\n"
+                "Điều này có thể là do bản cập nhật bot đang chờ xử lý."
             ),
             allow_sending_without_reply=True
         )
@@ -34,8 +34,8 @@ async def start_game(message: types.Message, game_type: Type[ClassicGame]) -> No
     if message.chat.slow_mode_delay:
         await message.reply(
             (
-                "Slow mode is enabled in this group, so the bot cannot function properly.\n"
-                "If you are a group admin, please disable slow mode to start games."
+                "Chế độ chậm được bật trong nhóm này, vì vậy bot không thể hoạt động bình thường.\n"
+                "Nếu bạn là quản trị viên nhóm, vui lòng tắt chế độ chậm để bắt đầu trò chơi."
             ),
             allow_sending_without_reply=True
         )
@@ -47,8 +47,8 @@ async def start_game(message: types.Message, game_type: Type[ClassicGame]) -> No
     ):
         await message.reply(
             (
-                "This game mode is a donation reward.\n"
-                "You can try this game mode at @on9wordchain."
+                "Chế độ trò chơi này là một phần thưởng đóng góp.\n"
+                "Bạn có thể thử chế độ chơi này tại @coihaycoc."
             ),
             allow_sending_without_reply=True
         )
@@ -122,7 +122,7 @@ async def cmd_killgame(message: types.Message) -> None:
     try:
         group_id = int(message.get_args() or message.chat.id)
         assert group_id < 0, "smh"
-        assert group_id in GlobalState.games, "no game running"
+        assert group_id in GlobalState.games, "không có trò chơi chạy"
     except (ValueError, AssertionError) as e:
         await message.reply(f"`{e.__class__.__name__}: {e}`", allow_sending_without_reply=True)
         return
@@ -133,7 +133,7 @@ async def cmd_killgame(message: types.Message) -> None:
     # If game is still not terminated
     if group_id in GlobalState.games:
         del GlobalState.games[group_id]
-        await message.reply("Game ended forcibly.", allow_sending_without_reply=True)
+        await message.reply("Trò chơi kết thúc do lỗi.", allow_sending_without_reply=True)
 
 
 @dp.message_handler(is_owner=True, game_running=True, commands="forceskip")
@@ -149,8 +149,8 @@ async def cmd_addvp(message: types.Message) -> None:
     if isinstance(GlobalState.games[group_id], EliminationGame):
         await message.reply(
             (
-                f"Sorry, [{(await on9bot.me).full_name}](https://t.me/{(await on9bot.me).username}) "
-                "can't play elimination games."
+                f"Xin lỗi, [{(await on9bot.me).full_name}](https://t.me/{(await on9bot.me).username}) "
+                "không thể chơi trò chơi loại bỏ."
             ),
             disable_web_page_preview=True, allow_sending_without_reply=True
         )
