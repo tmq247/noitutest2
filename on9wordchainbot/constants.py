@@ -10,16 +10,16 @@ logger.info("Loading constants from config file")
 with open(filename) as f:
     config = json.load(f)
 
-TOKEN = config["5036197906:AAEs-DDN0X_DCa8K66zYQsXkz5w8GSaFgtI"]
-ON9BOT_TOKEN = config["5093671528:AAEpbDvCfJdb2ZFK1i9rSHupGqoZTHC1sI4"]
-DB_URI = config["mongodb+srv://agarta01:44malatya22@cluster0.advkm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"]
+TOKEN = config["6272942112:AAF9Y6U0B2ZyQ2hdsQ9D_ETT8VtlhzXiDO4"]    #5036197906:AAEs-DDN0X_DCa8K66zYQsXkz5w8GSaFgtI
+ON9BOT_TOKEN = config[""]   #5093671528:AAEpbDvCfJdb2ZFK1i9rSHupGqoZTHC1sI4
+DB_URI = config["mongodb+srv://minhquang24071996:2407@coihaycoc.1an4oky.mongodb.net/?retryWrites=true&w=majority"]   #mongodb+srv://agarta01:44malatya22@cluster0.advkm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 PROVIDER_TOKEN = config["PROVIDER_TOKEN"]
-OWNER_ID = config["5038665445"]
-ADMIN_GROUP_ID = config["-1001793811732"]
-OFFICIAL_GROUP_ID = config["-1001793811732"]
-WORD_ADDITION_CHANNEL_ID = config["-1001602923043"]
-VIP = config["Dnztrmn"]
-VIP_GROUP = config["Keyfialemsohbet"]
+OWNER_ID = config["5838967403"]  #5038665445
+ADMIN_GROUP_ID = config["-1001854415088"]   #-1001793811732
+OFFICIAL_GROUP_ID = config["-1001854415088"]  #-1001793811732
+WORD_ADDITION_CHANNEL_ID = config["-1001854415088"]   #-1001602923043
+VIP = config["coihaycoc"]   #Dnztrmn
+VIP_GROUP = config["coihaycoc247"]   #Keyfialemsohbet
 
 WORDLIST_SOURCE = "https://raw.githubusercontent.com/dwyl/english-words/master/words.txt"
 
@@ -38,8 +38,8 @@ class GameSettings:
     MIN_PLAYERS = 2
     MAX_PLAYERS = 50
     INCREASED_MAX_PLAYERS = 300
-    MIN_TURN_SECONDS = 20
-    MAX_TURN_SECONDS = 40
+    MIN_TURN_SECONDS = 30
+    MAX_TURN_SECONDS = 50
     TURN_SECONDS_REDUCTION_PER_LIMIT_CHANGE = 5
     MIN_WORD_LENGTH_LIMIT = 3
     MAX_WORD_LENGTH_LIMIT = 10
