@@ -159,8 +159,8 @@ class ClassicGame:
                 return
 
             await self.send_message(
-                f"{player.name} was forced to flee. There {'is' if len(self.players) == 1 else 'are'} now "
-                f"{len(self.players)} player{'' if len(self.players) == 1 else 's'}.",
+                f"{player.name} buộc phải chạy trốn. Ở đó {'is' if len(self.players) == 1 else 'are'} ngay "
+                f"{len(self.players)} người chơi {'' if len(self.players) == 1 else 's'}.",
                 parse_mode=types.ParseMode.HTML
             )
 
@@ -179,7 +179,7 @@ class ClassicGame:
                 and not self.user_in_game(message.from_user.id)
                 and not await self.is_admin(message.from_user.id)
             ):
-                await self.send_message("Imagine not playing")
+                await self.send_message("Tưởng tượng không chơi")
                 return
 
             try:
@@ -188,7 +188,7 @@ class ClassicGame:
                 assert vp.is_chat_member() or vp.is_chat_admin()
             except (BadRequest, AssertionError):
                 await self.send_message(
-                    f"Add [On9Bot](tg://user?id={on9bot.id}) here to play as a virtual player.",
+                    f"Thêm vào [On9Bot](tg://user?id={on9bot.id}) ở đây để chơi như một người chơi ảo.",
                     reply_markup=ADD_ON9BOT_TO_GROUP_KEYBOARD
                 )
                 return
@@ -199,8 +199,8 @@ class ClassicGame:
             await on9bot.send_message(self.group_id, "/join@" + (await bot.me).username)
             await self.send_message(
                 (
-                    f"{vp.name} joined. There {'is' if len(self.players) == 1 else 'are'} now "
-                    f"{len(self.players)} player{'' if len(self.players) == 1 else 's'}."
+                    f"{vp.name} tham gia. Ở đó {'is' if len(self.players) == 1 else 'are'} ngay "
+                    f"{len(self.players)} người chơi{'' if len(self.players) == 1 else 's'}."
                 ),
                 parse_mode=types.ParseMode.HTML
             )
@@ -224,7 +224,7 @@ class ClassicGame:
                 and not self.user_in_game(message.from_user.id)
                 and not await self.is_admin(message.from_user.id)
             ):
-                await self.send_message("Imagine not playing")
+                await self.send_message("giả lập không chơi")
                 return
 
             for i in range(len(self.players)):
@@ -237,8 +237,8 @@ class ClassicGame:
             await on9bot.send_message(self.group_id, "/flee@" + (await bot.me).username)
             await self.send_message(
                 (
-                    f"{vp.name} fled. There {'is' if len(self.players) == 1 else 'are'} now "
-                    f"{len(self.players)} player{'' if len(self.players) == 1 else 's'}."
+                    f"{vp.name} bỏ trốn. Ở đó {'is' if len(self.players) == 1 else 'are'} ngay "
+                    f"{len(self.players)} người chơi{'' if len(self.players) == 1 else 's'}."
                 ),
                 parse_mode=types.ParseMode.HTML
             )
@@ -253,7 +253,7 @@ class ClassicGame:
             and not self.user_in_game(message.from_user.id)
             and not await self.is_admin(message.from_user.id)
         ):
-            await self.send_message("Imagine not playing")
+            await self.send_message("Giả lập không chơi")
             return
 
         # Each player can only extend once and only for 30 seconds except admins
@@ -269,7 +269,7 @@ class ClassicGame:
                 n = 30
                 is_neg = False
         elif message.from_user.id in self.extended_user_ids:
-            await self.send_message("You can only extend once peasant")
+            await self.send_message("Bạn chỉ có thể gia hạn một lần")
             return
         else:
             self.extended_user_ids.add(message.from_user.id)
@@ -279,7 +279,7 @@ class ClassicGame:
         if is_neg:
             # Reduce joining phase time (admins only)
             if not await self.is_admin(message.from_user.id):
-                await self.send_message("Imagine not being admin")
+                await self.send_message("Hãy tưởng tượng không phải là quản trị viên")
                 return
 
             if n >= self.time_left:
@@ -288,8 +288,8 @@ class ClassicGame:
             else:
                 self.time_left -= n
                 await self.send_message(
-                    f"The joining phase has been reduced by {n}s.\n"
-                    f"You have {self.time_left}s to /join."
+                    f"Giai đoạn tham gia đã được giảm bởi {n}s.\n"
+                    f"Bạn có {self.time_left}s để /join."
                 )
         else:
             # Extend joining phase time
@@ -297,19 +297,19 @@ class ClassicGame:
             added_duration = min(n, GameSettings.MAX_JOINING_PHASE_SECONDS - self.time_left)
             self.time_left += added_duration
             await self.send_message(
-                f"The joining phase has been extended by {added_duration}s.\n"
-                f"You have {self.time_left}s to /join."
+                f"Giai đoạn gia nhập đã được mở rộng bởi {added_duration}s.\n"
+                f"Bạn có {self.time_left}s để /join."
             )
 
     async def send_turn_message(self) -> None:
         await self.send_message(
             (
-                f"Turn: {self.players_in_game[0].mention} (Next: {self.players_in_game[1].name})\n"
-                f"Your word must start with <i>{self.current_word[-1].upper()}</i> and "
-                f"include <b>at least {self.min_letters_limit} letters</b>.\n"
-                f"You have <b>{self.time_limit}s</b> to answer.\n"
-                f"Players remaining: {len(self.players_in_game)}/{len(self.players)}\n"
-                f"Total words: {self.turns}"
+                f"Lượt: {self.players_in_game[0].mention} (Next: {self.players_in_game[1].name})\n"
+                f"Từ của bạn phải bắt đầu bằng <i>{self.current_word[-1].upper()}</i> và "
+                f"bao gồm <b>at least {self.min_letters_limit} letters</b>.\n"
+                f"Bạn có <b>{self.time_limit}s</b> để trả lời.\n"
+                f"Người chơi còn lại: {len(self.players_in_game)}/{len(self.players)}\n"
+                f"Tổng số từ: {self.turns}"
             ),
             parse_mode=types.ParseMode.HTML
         )
@@ -360,23 +360,23 @@ class ClassicGame:
         # Check if answer is invalid
         if not word.startswith(self.current_word[-1]):
             await message.reply(
-                f"_{word.capitalize()}_ does not start with _{self.current_word[-1].upper()}_.",
+                f"_{word.capitalize()}_ không bắt đầu với _{self.current_word[-1].upper()}_.",
                 allow_sending_without_reply=True
             )
             return
         # No minimum letters limit for elimination game modes
         if not isinstance(self, EliminationGame) and len(word) < self.min_letters_limit:
             await message.reply(
-                f"_{word.capitalize()}_ has less than {self.min_letters_limit} letters.",
+                f"_{word.capitalize()}_ có ít hơn {self.min_letters_limit} letters.",
                 allow_sending_without_reply=True
             )
             return
         if word in self.used_words:
-            await message.reply(f"_{word.capitalize()}_ has been used.", allow_sending_without_reply=True)
+            await message.reply(f"_{word.capitalize()}_ đã được dùng.", allow_sending_without_reply=True)
             return
         if not check_word_existence(word):
             await message.reply(
-                f"_{word.capitalize()}_ is not in my list of words.",
+                f"_{word.capitalize()}_ không có trong danh sách các từ của tôi.",
                 allow_sending_without_reply=True
             )
             return
@@ -412,22 +412,22 @@ class ClassicGame:
         self.accepting_answers = False
 
     async def send_post_turn_message(self, word: str) -> None:
-        text = f"_{word.capitalize()}_ is accepted.\n\n"
+        text = f"_{word.capitalize()}_ được chấp nhận.\n\n"
         # Reduce limits if possible every set number of turns
         if self.turns % GameSettings.TURNS_BETWEEN_LIMITS_CHANGE == 0:
             if self.time_limit > GameSettings.MIN_TURN_SECONDS:
                 self.time_limit -= GameSettings.TURN_SECONDS_REDUCTION_PER_LIMIT_CHANGE
                 text += (
-                    f"Time limit decreased from "
+                    f"Giới hạn thời gian giảm từ "
                     f"*{self.time_limit + GameSettings.TURN_SECONDS_REDUCTION_PER_LIMIT_CHANGE}s* "
-                    f"to *{self.time_limit}s*.\n"
+                    f"ĐẾN *{self.time_limit}s*.\n"
                 )
             if self.min_letters_limit < GameSettings.MAX_WORD_LENGTH_LIMIT:
                 self.min_letters_limit += GameSettings.WORD_LENGTH_LIMIT_INCREASE_PER_LIMIT_CHANGE
                 text += (
-                    f"Minimum letters per word increased from "
+                    f"Các chữ cái tối thiểu trên mỗi từ tăng từ "
                     f"*{self.min_letters_limit - GameSettings.WORD_LENGTH_LIMIT_INCREASE_PER_LIMIT_CHANGE}* "
-                    f"to *{self.min_letters_limit}*.\n"
+                    f"ĐẾN *{self.min_letters_limit}*.\n"
                 )
         await self.send_message(text)
 
@@ -439,8 +439,8 @@ class ClassicGame:
 
         await self.send_message(
             (
-                f"The first word is <i>{self.current_word.capitalize()}</i>.\n\n"
-                "Turn order:\n"
+                f"Từ đầu tiên là <i>{self.current_word.capitalize()}</i>.\n\n"
+                "Lượt khác:\n"
                 + "\n".join(p.mention for p in self.players_in_game)
             ),
             parse_mode=types.ParseMode.HTML
@@ -461,7 +461,7 @@ class ClassicGame:
             # Timer ran out
             self.accepting_answers = False
             await self.send_message(
-                f"{self.players_in_game[0].mention} ran out of time! They have been eliminated.",
+                f"{self.players_in_game[0].mention} đã hết thời gian! Họ đã bị loại.",
                 parse_mode=types.ParseMode.HTML
             )
             del self.players_in_game[0]
@@ -480,12 +480,12 @@ class ClassicGame:
         game_len_str = f"{int(td.total_seconds()) // 3600:02}{str(td)[-6:]}"
 
         winner = self.players_in_game[0].mention if self.players_in_game else "No one"
-        text = f"{winner} won the game out of {len(self.players)} players!\n"
-        text += f"Total words: {self.turns}\n"
+        text = f"{winner} đã thắng trò chơi {len(self.players)} người chơi!\n"
+        text += f"Tổng số từ: {self.turns}\n"
         if self.longest_word:
             longest_word_sender_name = [p for p in self.players if p.user_id == self.longest_word_sender_id][0].name
-            text += f"Longest word: <i>{self.longest_word.capitalize()}</i> from {longest_word_sender_name}\n"
-        text += f"Game length: <code>{game_len_str}</code>"
+            text += f"Từ dài nhất: <i>{self.longest_word.capitalize()}</i> từ {longest_word_sender_name}\n"
+        text += f"Thời lượng trò chơi: <code>{game_len_str}</code>"
         await self.send_message(text, parse_mode=types.ParseMode.HTML)
 
         GlobalState.games.pop(self.group_id, None)
@@ -495,7 +495,7 @@ class ClassicGame:
             # Insert game instance
             await conn.execute(
                 """\
-                INSERT INTO game (group_id, players, game_mode, winner, start_time, end_time)
+                CHÈN VÀO trò chơi (group_id, players, game_mode, winner, start_time, end_time)
                     VALUES ($1, $2, $3, $4, $5, $6);""",
                 self.group_id,
                 len(self.players),
@@ -506,7 +506,7 @@ class ClassicGame:
             )
             # Get game id
             game_id = await conn.fetchval(
-                "SELECT id FROM game WHERE group_id = $1 AND start_time = $2;",
+                "CHỌN id TỪ trò chơi Ở TẠI group_id = $1 AND start_time = $2;",
                 self.group_id,
                 self.start_time
             )
@@ -515,11 +515,11 @@ class ClassicGame:
 
     async def update_db_player(self, game_id: int, player: Player) -> None:
         async with pool.acquire() as conn:
-            player_exists = bool(await conn.fetchval("SELECT id FROM player WHERE user_id = $1;", player.user_id))
+            player_exists = bool(await conn.fetchval("CHỌN id TỪ người chơi Ở TẠI user_id = $1;", player.user_id))
             if player_exists:  # Update player in db
                 await conn.execute(
                     """\
-                    UPDATE player
+                   CẬP NHẬT người chơi
                     SET game_count = game_count + 1,
                         win_count = win_count + $1,
                         word_count = word_count + $2,
@@ -539,7 +539,7 @@ class ClassicGame:
             else:  # New player, create player in db
                 await conn.execute(
                     """\
-                    INSERT INTO player (user_id, game_count, win_count, word_count, letter_count, longest_word)
+                    CHÈN VÀO trình phát (user_id, game_count, win_count, word_count, letter_count, longest_word)
                         VALUES ($1, 1, $2, $3, $4, $5::TEXT);""",
                     player.user_id,
                     int(player in self.players_in_game),  # No winner in some game modes
@@ -551,7 +551,7 @@ class ClassicGame:
             # Create gameplayer in db
             await conn.execute(
                 """\
-                INSERT INTO gameplayer (user_id, group_id, game_id, won, word_count, letter_count, longest_word)
+                CHÈN VÀO người chơi (user_id, group_id, game_id, won, word_count, letter_count, longest_word)
                     VALUES ($1, $2, $3, $4, $5, $6, $7);""",
                 player.user_id,
                 self.group_id,
@@ -572,9 +572,9 @@ class ClassicGame:
             if self.state == GameState.KILLGAME or self.group_id not in GlobalState.games:
                 return  # Game already killed
 
-        await send_admin_group(f"Prolonged stale/negative timer detected in group `{self.group_id}`. Game terminated.")
+        await send_admin_group(f"Đã phát hiện bộ đếm thời gian cũ/âm tính kéo dài trong nhóm `{self.group_id}`. Game terminated.")
         try:
-            await self.send_message("Game timer is malfunctioning. Game terminated.")
+            await self.send_message("Hẹn giờ trò chơi bị trục trặc. Trò chơi đã kết thúc.")
         except:
             pass
 
@@ -585,9 +585,9 @@ class ClassicGame:
         negative_timer = 0
         try:
             await self.send_message(
-                f"A{'n' if self.name[0] in 'aeiou' else ''} {self.name} is starting.\n"
-                f"{self.min_players}-{self.max_players} players are needed.\n"
-                f"{self.time_left}s to /join."
+                f"A{'n' if self.name[0] in 'aeiou' else ''} {self.name} đang bắt đầu.\n"
+                f"{self.min_players}-{self.max_players} thời gian người chơi còn.\n"
+                f"{self.time_left}s để /join."
             )
             await self.join(message)
 
@@ -599,12 +599,12 @@ class ClassicGame:
                         if self.time_left in (15, 30, 60):
                             await self.send_message(f"{self.time_left}s left to /join.")
                     elif len(self.players) < self.min_players:
-                        await self.send_message("Not enough players. Game terminated.")
+                        await self.send_message("Không đủ người chơi. Trò chơi đã kết thúc.")
                         del GlobalState.games[self.group_id]
                         return
                     else:
                         self.state = GameState.RUNNING
-                        await self.send_message("Game is starting...")
+                        await self.send_message("Trò chơi đang bắt đầu...")
 
                         random.shuffle(self.players)
                         self.players_in_game = self.players[:]
@@ -616,21 +616,21 @@ class ClassicGame:
                     if self.time_left < 0:
                         negative_timer += 1
                     if negative_timer >= 5:
-                        raise ValueError("Prolonged negative timer.")
+                        raise ValueError("Hẹn giờ âm kéo dài.")
 
                     if await self.running_phase_tick():  # True: Game ended
                         await self.update_db()
                         return
                 elif self.state == GameState.KILLGAME:
-                    await self.send_message("Game ended forcibly.")
+                    await self.send_message("Trò chơi kết thúc bất ngờ.")
                     GlobalState.games.pop(self.group_id, None)
                     return
         except Exception as e:
             GlobalState.games.pop(self.group_id, None)
             try:
                 await self.send_message(
-                    f"Game ended due to the following error:\n`{e.__class__.__name__}: {e}`.\n"
-                    "My owner will be notified."
+                    f"Trò chơi đã kết thúc do lỗi sau:\n`{e.__class__.__name__}: {e}`.\n"
+                    "Chủ sở hữu của tôi sẽ được thông báo."
                 )
             except:
                 pass
