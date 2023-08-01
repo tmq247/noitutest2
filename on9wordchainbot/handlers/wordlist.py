@@ -1,3 +1,4 @@
+
 import asyncio
 import time
 
@@ -17,9 +18,9 @@ async def cmd_exists(message: types.Message) -> None:
         if not rmsg or not rmsg.text or not is_word(rmsg.text.lower()):
             await message.reply(
                 (
-                    "Function: Check if a word is in my dictionary. "
-                    "Use /reqaddword if you want to request addition of new words.\n"
-                    "Usage: `/exists word`"
+                    "Chức năng: Kiểm tra xem một từ có trong từ điển của tôi không. "
+                    "Dùng /reqaddword nếu bạn muốn yêu cầu thêm từ mới.\n"
+                    "Cách sử dụng: `/exists từ`"
                 ),
                 allow_sending_without_reply=True
             )
@@ -27,7 +28,7 @@ async def cmd_exists(message: types.Message) -> None:
         word = rmsg.text.lower()
 
     await message.reply(
-        f"_{word.capitalize()}_ is *{'' if check_word_existence(word) else 'not '}in* my dictionary.",
+        f"_{word.capitalize()}_ là *{'' if check_word_existence(word) else 'not '}trong* từ điển của tôi.",
         allow_sending_without_reply=True
     )
 
@@ -41,14 +42,14 @@ async def cmd_reqaddword(message: types.Message) -> None:
     if not words_to_add:
         await message.reply(
             (
-                "Function: Request new words. Check @on9wcwa for word list updates.\n"
-                "Before requesting a new word, please check that:\n"
-                "- It is an English word (\u274c other languages)\n"
-                "- It is spelled correctly\n"
-                "- It is not a [proper noun](https://simple.wikipedia.org/wiki/Proper_noun) "
-                "(\u274c names)\n"
-                "  (existing proper nouns in the word list and nationalities are exempt)\n"
-                "Usage: `/reqaddword word1 word2 ...`"
+                "Chức năng: Yêu cầu từ mới. Kiểm tra @coihaycoc để cập nhật danh sách từ.\n"
+                "Trước khi yêu cầu một từ mới, vui lòng kiểm tra xem:\n"
+                "- Nó là một từ Tiếng Việt (\u274c những ngôn ngữ khác)\n"
+                "- Nó được viết đúng chính tả\n"
+                "- Nó không phải là [danh từ riêng](https://simple.wikipedia.org/wiki/Proper_noun) "
+                "(\u274c tên)\n"
+                "  (danh từ riêng hiện có trong danh sách từ và quốc tịch được miễn)\n"
+                "Cách sử dụng: `/reqaddword từ1 từ2 ...`"
             ),
             disable_web_page_preview=True,
             allow_sending_without_reply=True
@@ -64,7 +65,7 @@ async def cmd_reqaddword(message: types.Message) -> None:
             words_to_add.remove(w)
 
     async with pool.acquire() as conn:
-        rej = await conn.fetch("SELECT word, reason FROM wordlist WHERE NOT accepted;")
+        rej = await conn.fetch("CHỌN từ, lý do TỪ danh sách từ KHÔNG được chấp nhận;")
     for word, reason in rej:
         if word not in words_to_add:
             continue
@@ -77,7 +78,7 @@ async def cmd_reqaddword(message: types.Message) -> None:
 
     text = ""
     if words_to_add:
-        text += f"Submitted {', '.join(['_' + w.capitalize() + '_' for w in words_to_add])} for approval.\n"
+        text += f"Đã gửi {', '.join(['_' + w.capitalize() + '_' for w in words_to_add])} phê duyệt.\n"
         asyncio.create_task(
             send_admin_group(
                 message.from_user.get_mention(
@@ -85,18 +86,18 @@ async def cmd_reqaddword(message: types.Message) -> None:
                          + (" \u2b50\ufe0f" if await has_star(message.from_user.id) else ""),
                     as_html=True
                 )
-                + " is requesting the addition of "
+                + " đang yêu cầu bổ sung "
                 + ", ".join(["<i>" + w.capitalize() + "</i>" for w in words_to_add])
-                + " to the word list. #reqaddword",
+                + " vào danh sách từ. #reqaddword",
                 parse_mode=types.ParseMode.HTML
             )
         )
     if existing:
-        text += f"{', '.join(existing)} {'is' if len(existing) == 1 else 'are'} already in the word list.\n"
+        text += f"{', '.join(existing)} {'is' if len(existing) == 1 else 'are'} đã có trong danh sách từ.\n"
     if rejected:
-        text += f"{', '.join(rejected)} {'was' if len(rejected) == 1 else 'were'} rejected.\n"
+        text += f"{', '.join(rejected)} {'was' if len(rejected) == 1 else 'were'} vật bị loại bỏ.\n"
     for word, reason in rejected_with_reason:
-        text += f"{word} was rejected. Reason: {reason}.\n"
+        text += f"{word} đã bị từ chối. Lý do: {reason}.\n"
     await message.reply(text, allow_sending_without_reply=True)
 
 
@@ -104,7 +105,7 @@ async def cmd_reqaddword(message: types.Message) -> None:
 async def cmd_addwords(message: types.Message) -> None:
     words_to_add = [w for w in set(message.get_args().lower().split()) if is_word(w)]
     if not words_to_add:
-        await message.reply("where words", allow_sending_without_reply=True)
+        await message.reply("tại từ", allow_sending_without_reply=True)
         return
 
     existing = []
@@ -116,7 +117,7 @@ async def cmd_addwords(message: types.Message) -> None:
             words_to_add.remove(w)
 
     async with pool.acquire() as conn:
-        rej = await conn.fetch("SELECT word, reason FROM wordlist WHERE NOT accepted;")
+        rej = await conn.fetch("CHỌN từ, lý do TỪ danh sách từ KHÔNG được chấp nhận;")
     for word, reason in rej:
         if word not in words_to_add:
             continue
@@ -131,13 +132,13 @@ async def cmd_addwords(message: types.Message) -> None:
     if words_to_add:
         async with pool.acquire() as conn:
             await conn.copy_records_to_table("wordlist", records=[(w, True, None) for w in words_to_add])
-        text += f"Added {', '.join(['_' + w.capitalize() + '_' for w in words_to_add])} to the word list.\n"
+        text += f"Đã thêm {', '.join(['_' + w.capitalize() + '_' for w in words_to_add])} vào danh sách từ.\n"
     if existing:
-        text += f"{', '.join(existing)} {'is' if len(existing) == 1 else 'are'} already in the word list.\n"
+        text += f"{', '.join(existing)} {'is' if len(existing) == 1 else 'are'} đã có trong danh sách từ.\n"
     if rejected:
-        text += f"{', '.join(rejected)} {'was' if len(rejected) == 1 else 'were'} rejected.\n"
+        text += f"{', '.join(rejected)} {'was' if len(rejected) == 1 else 'were'} vật bị loại bỏ.\n"
     for word, reason in rejected_with_reason:
-        text += f"{word} was rejected. Reason: {reason}.\n"
+        text += f"{word} đã bị từ chối. Lý do: {reason}.\n"
     msg = await message.reply(text, allow_sending_without_reply=True)
 
     if not words_to_add:
@@ -146,12 +147,12 @@ async def cmd_addwords(message: types.Message) -> None:
     t = time.time()
     await Words.update()
     asyncio.create_task(
-        msg.edit_text(msg.md_text + f"\n\nWord list updated. Time taken: `{time.time() - t:.3f}s`")
+        msg.edit_text(msg.md_text + f"\n\nDanh sách từ được cập nhật. Mất thời gian: `{time.time() - t:.3f}s`")
     )
     asyncio.create_task(
         bot.send_message(
             WORD_ADDITION_CHANNEL_ID,
-            f"Added {', '.join(['_' + w.capitalize() + '_' for w in words_to_add])} to the word list.",
+            f"Đã thêm {', '.join(['_' + w.capitalize() + '_' for w in words_to_add])} vào danh sách từ.",
             disable_notification=True
         )
     )
@@ -166,23 +167,23 @@ async def cmd_rejword(message: types.Message) -> None:
 
     word = word.lower()
     async with pool.acquire() as conn:
-        r = await conn.fetchrow("SELECT accepted, reason FROM wordlist WHERE word = $1;", word)
+        r = await conn.fetchrow("CHỌN được chấp nhận, lý do TỪ danh sách từ NƠI từ = $1;", word)
         if r is None:
             await conn.execute(
-                "INSERT INTO wordlist (word, accepted, reason) VALUES ($1, false, $2)",
+                "CHÈN VÀO danh sách từ (từ, chấp nhận, lý do) GIÁ TRỊ ($1, false, $2)",
                 word,
                 reason.strip() or None
             )
 
     word = word.capitalize()
     if r is None:
-        await message.reply(f"_{word}_ rejected.", allow_sending_without_reply=True)
+        await message.reply(f"_{word}_ vật bị loại bỏ.", allow_sending_without_reply=True)
     elif r["accepted"]:
-        await message.reply(f"_{word}_ was accepted.", allow_sending_without_reply=True)
+        await message.reply(f"_{word}_ đã được chấp nhận.", allow_sending_without_reply=True)
     elif not r["reason"]:
-        await message.reply(f"_{word}_ was already rejected.", allow_sending_without_reply=True)
+        await message.reply(f"_{word}_ đã bị từ chối.", allow_sending_without_reply=True)
     else:
         await message.reply(
-            f"_{word}_ was already rejected. Reason: {r['reason']}.",
+            f"_{word}_ đã bị từ chối. Lý do: {r['reason']}.",
             allow_sending_without_reply=True
         )
