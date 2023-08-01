@@ -10,7 +10,7 @@ from ...utils import get_random_word
 
 
 class RequiredLetterGame(ClassicGame):
-    name = "required letter game"
+    name = "Trò chơi từ bắt buộc"
     command = "startrl"
 
     __slots__ = ("required_letter",)
@@ -24,13 +24,13 @@ class RequiredLetterGame(ClassicGame):
     async def send_turn_message(self) -> None:
         await self.send_message(
             (
-                f"Turn: {self.players_in_game[0].mention} (Next: {self.players_in_game[1].name})\n"
-                f"Your word must start with <i>{self.current_word[-1].upper()}</i>, "
-                f"<b>include</b> <i>{self.required_letter.upper()}</i> and "
-                f"<b>at least {self.min_letters_limit} letter{'' if self.min_letters_limit == 1 else 's'}</b>.\n"
-                f"You have <b>{self.time_limit}s</b> to answer.\n"
-                f"Players remaining: {len(self.players_in_game)}/{len(self.players)}\n"
-                f"Total words: {self.turns}"
+                f"Lượt: {self.players_in_game[0].mention} (Tiếp theo: {self.players_in_game[1].name})\n"
+                f"Từ của bạn phải bắt đầu bằng <i>{self.current_word[-1].upper()}</i>, "
+                f"<b>bao gồm</b> <i>{self.required_letter.upper()}</i> và "
+                f"<b>ít nhất {self.min_letters_limit} từ{'' if self.min_letters_limit == 1 else 's'}</b>.\n"
+                f"Bạn có <b>{self.time_limit}s</b> để trả lời.\n"
+                f"Người chơi còn lại: {len(self.players_in_game)}/{len(self.players)}\n"
+                f"Tổng số từ: {self.turns}"
             ),
             parse_mode=types.ParseMode.HTML
         )
@@ -54,7 +54,7 @@ class RequiredLetterGame(ClassicGame):
     async def additional_answer_checkers(self, word: str, message: types.Message) -> bool:
         if self.required_letter not in word:
             await message.reply(
-                f"_{word.capitalize()}_ does not include _{self.required_letter.upper()}_.",
+                f"_{word.capitalize()}_ không bao gồm _{self.required_letter.upper()}_.",
                 allow_sending_without_reply=True
             )
             return False
@@ -78,8 +78,8 @@ class RequiredLetterGame(ClassicGame):
 
         await self.send_message(
             (
-                f"The first word is <i>{self.current_word.capitalize()}</i>.\n\n"
-                "Turn order:\n"
+                f"từ đầu tiên là <i>{self.current_word.capitalize()}</i>.\n\n"
+                "Lượt khác:\n"
                 + "\n".join(p.mention for p in self.players_in_game)
             ),
             parse_mode=types.ParseMode.HTML
