@@ -8,7 +8,7 @@ from .classic import ClassicGame
 
 
 class ChosenFirstLetterGame(ClassicGame):
-    name = "chosen first letter game"
+    name = "Trò chơi chữ cái đầu tiên được chọn"
     command = "startcfl"
 
     async def running_initialization(self) -> None:
@@ -19,8 +19,8 @@ class ChosenFirstLetterGame(ClassicGame):
 
         await self.send_message(
             (
-                f"The chosen first letter is <i>{self.current_word.upper()}</i>.\n\n"
-                "Turn order:\n"
+                f"Chữ cái đầu tiên được chọn là <i>{self.current_word.upper()}</i>.\n\n"
+                "LƯỢt khác:\n"
                 + "\n".join(p.mention for p in self.players_in_game)
             ),
             parse_mode=types.ParseMode.HTML
