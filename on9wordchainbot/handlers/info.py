@@ -28,16 +28,16 @@ async def cmd_help(message: types.Message) -> None:
 
     await message.reply(
         (
-            "/gameinfo - Game mode descriptions\n"
-            "/troubleshoot - Resolve common issues\n"
-            "/reqaddword - Request addition of words\n"
-            "/feedback - Send feedback to bot owner\n\n"
-            "You may message [JOKER TG 🇮🇳](https://t.me/IAM_A_JOKER) "
-            "in *English / Cantonese* if you have issues with the bot.\n"
-            "Official Group: @Ls_Supportz & @Ak_Bot_SupportGroup"
-            "Word Additions OWNER: @IAM_A_JOKER\n"
-            "Source Code: [Ask to my owner](https://t.me/IAM_A_JOKER)\n"
-            "Epic icon designed by [joker tg 🇮🇳](https://t.me/IAM_A_JOKER)"
+            "/gameinfo - Mô tả chế độ trò chơi\n"
+            "/troubleshoot - Giải quyết các vấn đề chung\n"
+            "/reqaddword - Yêu cầu thêm từ\n"
+            "/feedback - Gửi phản hồi cho chủ sở hữu bot\n\n"
+            "Bạn có thể nhắn tin [Còi](https://t.me/coihaycoc) "
+            "Bằng tiếng người * nếu bạn gặp sự cố với bot.\n"
+            "Official Group: @nguhanh69 & @xemshownguhanh69"
+            "Bổ sung từ CHỦ SỞ HỮU: @coihaycoc\n"
+            "Mã nguồn: [Hỏi chủ nhân của tôi](https://t.me/coihaycoc)\n"
+            "Biểu tượng sử thi được thiết kế bởi[joker tg 🇮🇳](https://t.me/IAM_A_JOKER)"
         ),
         disable_web_page_preview=True,
         allow_sending_without_reply=True
@@ -49,20 +49,20 @@ async def cmd_help(message: types.Message) -> None:
 async def cmd_gameinfo(message: types.Message) -> None:
     await message.reply(
         (
-            "/startclassic - Classic game\n"
-            "Players take turns to send words starting with the last letter of the previous word.\n\n"
-            "Variants:\n"
-            "/starthard - Hard mode game\n"
-            "/startchaos - Chaos game (random turn order)\n"
-            "/startcfl - Chosen first letter game\n"
-            "/startrfl - Random first letter game\n"
-            "/startbl - Banned letters game\n"
-            "/startrl - Required letter game\n\n"
-            "/startelim - Elimination game\n"
-            "Each player's score is their cumulative word length. "
-            "The lowest scoring players are eliminated after each round.\n\n"
-            "/startmelim - Mixed elimination game (donation reward)\n"
-            "Elimination game with different modes. Try at."
+            "/startclassic - trò chơi cổ điển\n"
+            "Người chơi lần lượt gửi các từ bắt đầu bằng chữ cái cuối cùng của từ trước đó.\n\n"
+            "Biến thể:\n"
+            "/starthard - Trò chơi chế độ khó\n"
+            "/startchaos - Trò chơi hỗn loạn (thứ tự lần lượt ngẫu nhiên)\n"
+            "/startcfl - Trò chơi chữ cái đầu tiên được chọn\n"
+            "/startrfl - Trò chơi chữ cái đầu tiên ngẫu nhiên\n"
+            "/startbl - Trò chơi chữ cái bị cấm\n"
+            "/startrl - Trò chơi thư bắt buộc\n\n"
+            "/startelim - trò chơi loại bỏ\n"
+            "Điểm của mỗi người chơi là độ dài từ tích lũy của họ. "
+            "Những người chơi ghi điểm thấp nhất bị loại sau mỗi vòng.\n\n"
+            "/startmelim - Trò chơi loại bỏ hỗn hợp (phần thưởng quyên góp)\n"
+            "Trò chơi loại bỏ với các chế độ khác nhau. Hãy thử tại."
         ),
         allow_sending_without_reply=True
     )
@@ -73,19 +73,19 @@ async def cmd_gameinfo(message: types.Message) -> None:
 async def cmd_troubleshoot(message: types.Message) -> None:
     await message.reply(
         (
-            "These steps assume you have admin privileges. "
-            "If you do not, please ask a group admin to check instead.\n\n"
-            "<b>If the bot does not respond to <code>/start[mode]</code></b>, check if:\n"
-            "1. The bot is absent from / muted in your group "
-            "\u27a1\ufe0f Add the bot to your group / Unmute the bot\n"
-            "2. Slow mode is enabled \u27a1\ufe0f Disable slow mode\n"
-            "3. Someone spammed commands in your group recently "
-            "\u27a1\ufe0f The bot is rate limited in your group, wait patiently\n"
-            "4. The bot does not respond to <code>/ping</code> "
-            "\u27a1\ufe0f The bot is likely offline, check @on9wcwa for status updates\n\n"
-            "<b>If the bot cannot be added to your group</b>:\n"
-            "1. There can be at most 20 bots in a group. Check if this limit is reached.\n\n"
-            "If you encounter other issues, please contact <a href='tg://user?id=463998526'>my owner</a>."
+            "Các bước này giả sử bạn có quyền quản trị viên. "
+            "Nếu không, vui lòng yêu cầu quản trị viên nhóm kiểm tra thay.\n\n"
+            "<b>Nếu bot không phản hồi <code>/start[mode]</code></b>, kiểm tra nếu:\n"
+            "1. Bot vắng mặt/tắt tiếng trong nhóm của bạn "
+            "\u27a1\ufe0f Thêm bot vào nhóm của bạn / Bật tiếng bot\n"
+            "2. Chế độ chậm được bật \u27a1\ufe0f Tắt chế độ chậm\n"
+            "3. Gần đây ai đó đã spam các lệnh trong nhóm của bạn "
+            "\u27a1\ufe0f Bot bị giới hạn tốc độ trong nhóm của bạn, hãy kiên nhẫn chờ đợi\n"
+            "4. Bot không phản hồi<code>/ping</code> "
+            "\u27a1\ufe0f Có khả năng bot đang ngoại tuyến, hãy kiểm tra @coihaycoc để cập nhật trạng thái\n\n"
+            "<b>If bot không thể được thêm vào nhóm của bạn</b>:\n"
+            "1. Có thể có tối đa 20 bot trong một nhóm. Kiểm tra xem đã đạt đến giới hạn này chưa.\n\n"
+            "Nếu bạn gặp các vấn đề khác, vui lòng liên hệ <a href='tg://user?id=463998526'>chủ nhân của tôi</a>."
         ),
         parse_mode=types.ParseMode.HTML,
         allow_sending_without_reply=True
@@ -129,7 +129,7 @@ async def cmd_runinfo(message: types.Message) -> None:
 @dp.message_handler(is_owner=True, commands="playinggroups")
 async def cmd_playinggroups(message: types.Message) -> None:
     if not GlobalState.games:
-        await message.reply("No groups are playing games.", allow_sending_without_reply=True)
+        await message.reply("Không có nhóm nào đang chơi trò chơi.", allow_sending_without_reply=True)
         return
 
     groups = []
@@ -140,7 +140,7 @@ async def cmd_playinggroups(message: types.Message) -> None:
             url = await group.get_url()
             # TODO: weakref exception is aiogram bug, wait fix
         except TypeError as e:
-            if str(e) == "cannot create weak reference to 'NoneType' object":
+            if str(e) == "không thể tạo tham chiếu yếu đến đối tượng 'NoneType'":
                 text = "???"
             else:
                 text = f"(<code>{e.__class__.__name__}: {e}</code>)"
