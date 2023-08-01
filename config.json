@@ -1,12 +1,12 @@
 {
-    "TOKEN": "",
-    "ON9BOT_TOKEN": "",
-    "DB_URI": "",
+    "TOKEN": "6272942112:AAF9Y6U0B2ZyQ2hdsQ9D_ETT8VtlhzXiDO4",
+    "ON9BOT_TOKEN": "6226805699:AAE1T96RKSjs06kNID7VW9xVsYaSOFDI92o",
+    "DB_URI": "mongodb+srv://minhquang24071996:2407@coihaycoc.1an4oky.mongodb.net/?retryWrites=true&w=majority",
     "PROVIDER_TOKEN": "",
-    "OWNER_ID": ,
-    "ADMIN_GROUP_ID": ,
-    "OFFICIAL_GROUP_ID": ,
-    "WORD_ADDITION_CHANNEL_ID": ,
-    "VIP": [],
-    "VIP_GROUP": []
+    "OWNER_ID": 5838967403,
+    "ADMIN_GROUP_ID": -1001854415088,
+    "OFFICIAL_GROUP_ID": -1001854415088,
+    "WORD_ADDITION_CHANNEL_ID": -1001854415088,
+    "VIP": [coihaycoc],
+    "VIP_GROUP": [coihaycoc247]
 }
