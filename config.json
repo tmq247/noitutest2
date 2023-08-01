@@ -1,12 +1,12 @@
 {
-    "TOKEN": ,
-    "ON9BOT_TOKEN": ,
+    "TOKEN": "",
+    "ON9BOT_TOKEN": "",
     "DB_URI": "",
     "PROVIDER_TOKEN": ,
     "OWNER_ID": ,
     "ADMIN_GROUP_ID": ,
     "OFFICIAL_GROUP_ID": ,
     "WORD_ADDITION_CHANNEL_ID": ,
-    "VIP": ,
-    "VIP_GROUP": 
+    "VIP": [],
+    "VIP_GROUP": []
 }
