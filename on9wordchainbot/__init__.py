@@ -47,7 +47,7 @@ class GlobalState:
 
 async def init() -> None:
     global pool
-    logger.info("Connecting to database")
+    logger.info("Kết nối với cơ sở dữ liệu")
     pool = await asyncpg.create_pool(DB_URI, loop=loop)
 
 
