@@ -8,7 +8,7 @@ from ...utils import get_random_word
 
 
 class RandomFirstLetterGame(ClassicGame):
-    name = "random first letter game"
+    name = "Trò chơi chữ cái đầu tiên ngẫu nhiên"
     command = "startrfl"
 
     def change_first_letter(self) -> None:
@@ -24,8 +24,8 @@ class RandomFirstLetterGame(ClassicGame):
         self.start_time = datetime.now().replace(microsecond=0)
 
         await self.send_message(
-            f"The first word is <i>{self.current_word.capitalize()}</i>.\n\n"
-            "Turn order:\n"
+            f"Từ đầu tiên là <i>{self.current_word.capitalize()}</i>.\n\n"
+            "Lượt khác:\n"
             + "\n".join(p.mention for p in self.players_in_game),
             parse_mode=types.ParseMode.HTML
         )
