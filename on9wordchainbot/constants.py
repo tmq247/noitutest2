@@ -11,7 +11,7 @@ with open(filename) as f:
     config = json.load(f)
 
 TOKEN = config["6272942112:AAF9Y6U0B2ZyQ2hdsQ9D_ETT8VtlhzXiDO4"]    #5036197906:AAEs-DDN0X_DCa8K66zYQsXkz5w8GSaFgtI
-ON9BOT_TOKEN = config[""]   #5093671528:AAEpbDvCfJdb2ZFK1i9rSHupGqoZTHC1sI4
+ON9BOT_TOKEN = config["6226805699:AAE1T96RKSjs06kNID7VW9xVsYaSOFDI92o"]   #5093671528:AAEpbDvCfJdb2ZFK1i9rSHupGqoZTHC1sI4
 DB_URI = config["mongodb+srv://minhquang24071996:2407@coihaycoc.1an4oky.mongodb.net/?retryWrites=true&w=majority"]   #mongodb+srv://agarta01:44malatya22@cluster0.advkm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 PROVIDER_TOKEN = config["PROVIDER_TOKEN"]
 OWNER_ID = config["5838967403"]  #5038665445
