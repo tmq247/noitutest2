@@ -8,18 +8,18 @@ from ...utils import get_random_word
 
 
 class ChaosGame(ClassicGame):
-    name = "chaos game"
+    name = "chế độ chaos"
     command = "startchaos"
 
     async def send_turn_message(self) -> None:
         await self.send_message(
             (
-                f"Turn: {self.players_in_game[0].mention}\n"
-                f"Your word must start with <i>{self.current_word[-1].upper()}</i> and "
-                f"contain <b>at least {self.min_letters_limit} letters</b>.\n"
-                f"You have <b>{self.time_limit}s</b> to answer.\n"
-                f"Players remaining: {len(self.players_in_game)}/{len(self.players)}\n"
-                f"Total words: {self.turns}"
+                f"Lượt: {self.players_in_game[0].mention}\n"
+                f"Từ của bạn phải bắt đầu bằng <i>{self.current_word[-1].upper()}</i> và "
+                f"bao gồm <b>at ít nhất {self.min_letters_limit} letters</b>.\n"
+                f"Bạn có <b>{self.time_limit}s</b> để trả lời.\n"
+                f"Người chơi còn lại: {len(self.players_in_game)}/{len(self.players)}\n"
+                f"Tổng số từ: {self.turns}"
             ),
             parse_mode=types.ParseMode.HTML
         )
@@ -39,7 +39,7 @@ class ChaosGame(ClassicGame):
         self.start_time = datetime.now().replace(microsecond=0)
 
         # No turn order
-        await self.send_message(f"The first word is _{self.current_word.capitalize()}_.")
+        await self.send_message(f"Từ đầu tiên là _{self.current_word.capitalize()}_.")
 
     async def running_phase_tick(self) -> bool:
         if self.answered:
@@ -56,7 +56,7 @@ class ChaosGame(ClassicGame):
             # Timer ran out
             self.accepting_answers = False
             await self.send_message(
-                f"{self.players_in_game[0].mention} ran out of time! They have been eliminated.",
+                f"{self.players_in_game[0].mention} đã hết thời gian! Họ đã bị loại.",
                 parse_mode=types.ParseMode.HTML
             )
             del self.players_in_game[0]
