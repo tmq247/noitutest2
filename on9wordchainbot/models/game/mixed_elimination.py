@@ -18,7 +18,7 @@ class MixedEliminationGame(EliminationGame):
     # but the whole word during ChosenFirstLetterGame here
     # for easier transition of game modes
 
-    name = "mixed elimination game"
+    name = "trò chơi loại bỏ hỗn hợp"
     command = "startmelim"
     game_modes = [
         ClassicGame,
@@ -48,13 +48,13 @@ class MixedEliminationGame(EliminationGame):
         text += f"Your word must start with <i>{starting_letter.upper()}</i>"
 
         if self.game_mode is BannedLettersGame:
-            text += f" and <b>exclude</b> <i>{', '.join(c.upper() for c in self.banned_letters)}</i>"
+            text += f" and <b>loại trừ</b> <i>{', '.join(c.upper() for c in self.banned_letters)}</i>"
         elif self.game_mode is RequiredLetterGame:
-            text += f" and <b>include</b> <i>{self.required_letter.upper()}</i>"
+            text += f" và <b>bao gồm</b> <i>{self.required_letter.upper()}</i>"
         text += ".\n"
 
-        text += f"You have <b>{self.time_limit}s</b> to answer.\n\n"
-        text += "Leaderboard:\n" + self.get_leaderboard(show_player=self.players_in_game[0])
+        text += f"Bạn có <b>{self.time_limit}s</b> để trả lời.\n\n"
+        text += "Bảng xếp hạng:\n" + self.get_leaderboard(show_player=self.players_in_game[0])
         await self.send_message(text, parse_mode=types.ParseMode.HTML)
 
         # Reset per-turn attributes
@@ -76,23 +76,23 @@ class MixedEliminationGame(EliminationGame):
         if self.game_mode is ChosenFirstLetterGame:
             if not word.startswith(self.current_word[0]):
                 await message.reply(
-                    f"_{word.capitalize()}_ does not start with _{self.current_word[0].upper()}_.",
+                    f"_{word.capitalize()}_ không bắt đầu với _{self.current_word[0].upper()}_.",
                     allow_sending_without_reply=True
                 )
                 return
         elif not word.startswith(self.current_word[-1]):
             await message.reply(
-                f"_{word.capitalize()}_ does not start with _{self.current_word[-1].upper()}_.",
+                f"_{word.capitalize()}_ không bắt đầu với _{self.current_word[-1].upper()}_.",
                 allow_sending_without_reply=True
             )
             return
 
         if word in self.used_words:
-            await message.reply(f"_{word.capitalize()}_ has been used.", allow_sending_without_reply=True)
+            await message.reply(f"_{word.capitalize()}_ đã được dùng.", allow_sending_without_reply=True)
             return
         if not check_word_existence(word):
             await message.reply(
-                f"_{word.capitalize()}_ is not in my list of words.",
+                f"_{word.capitalize()}_ không có trong danh sách các từ của tôi.",
                 allow_sending_without_reply=True
             )
             return
@@ -129,19 +129,19 @@ class MixedEliminationGame(EliminationGame):
 
         await self.send_message(
             (
-                f"The first word is <i>{self.current_word.capitalize()}</i>.\n\n"
+                f"từ đầu tiên là <i>{self.current_word.capitalize()}</i>.\n\n"
                 "Turn order:\n"
                 + "\n".join(p.mention for p in self.players_in_game)
             ),
             parse_mode=types.ParseMode.HTML
         )
 
-        round_text = f"Round 1 is starting...\nMode: <b>{self.game_mode.name.capitalize()}</b>"
+        round_text = f"Vòng 1 đang bắt đầu...\nChế độ: <b>{self.game_mode.name.capitalize()}</b>"
         if self.game_mode is ChosenFirstLetterGame:
-            round_text += f"\nThe chosen first letter is <i>{self.current_word[0].upper()}</i>."
+            round_text += f"\nChữ cái đầu tiên được chọn là <i>{self.current_word[0].upper()}</i>."
         elif self.game_mode is BannedLettersGame:
-            round_text += f"\nBanned letters: <i>{', '.join(c.upper() for c in self.banned_letters)}</i>"
-        round_text += "\n\nLeaderboard:\n" + self.get_leaderboard()
+            round_text += f"\nTừ cấm: <i>{', '.join(c.upper() for c in self.banned_letters)}</i>"
+        round_text += "\n\nBảng xếp hạng:\n" + self.get_leaderboard()
         await self.send_message(round_text, parse_mode=types.ParseMode.HTML)
 
     def set_game_mode(self) -> None:
@@ -161,12 +161,12 @@ class MixedEliminationGame(EliminationGame):
         self.turns_until_elimination = len(self.players_in_game)
         self.set_game_mode()
 
-        round_text = f"Round {self.round} is starting...\nMode: <b>{self.game_mode.name.capitalize()}</b>"
+        round_text = f"Vòng {self.round} đang bắt đầu...\nChế độ: <b>{self.game_mode.name.capitalize()}</b>"
         if self.game_mode is ChosenFirstLetterGame:
             # The last letter of the current word becomes the chosen first letter
             self.current_word = self.current_word[-1]
-            round_text += f"\nThe chosen first letter is <i>{self.current_word.upper()}</i>."
+            round_text += f"\nChữ cái đầu tiên được chọn là <i>{self.current_word.upper()}</i>."
         elif self.game_mode is BannedLettersGame:
-            round_text += f"\nBanned letters: <i>{', '.join(c.upper() for c in self.banned_letters)}</i>"
-        round_text += "\n\nLeaderboard:\n" + self.get_leaderboard()
+            round_text += f"\nTừ cấm: <i>{', '.join(c.upper() for c in self.banned_letters)}</i>"
+        round_text += "\n\nBảng xếp hạng:\n" + self.get_leaderboard()
         await self.send_message(round_text, parse_mode=types.ParseMode.HTML)
