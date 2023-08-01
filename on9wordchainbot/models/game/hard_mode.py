@@ -3,7 +3,7 @@ from ...constants import GameSettings
 
 
 class HardModeGame(ClassicGame):
-    name = "hard mode game"
+    name = "trò chơi chế độ khó"
     command = "starthard"
 
     def __init__(self, group_id: int) -> None:
